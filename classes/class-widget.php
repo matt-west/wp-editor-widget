@@ -45,13 +45,14 @@ class WP_Editor_Widget extends WP_Widget {
 		extract( $args );
 
 		$title			= apply_filters( 'wp_editor_widget_title', $instance['title'] );
+		$icon			= apply_filters( 'wp_editor_widget_icon', $instance['icon'] );
 		$output_title	= apply_filters( 'wp_editor_widget_output_title', $instance['output_title'] );
 		$content		= apply_filters( 'wp_editor_widget_content', $instance['content'] );
 
 		echo $before_widget;
 
 		if ( $output_title == "1" && !empty($title) ) {
-			echo $before_title . $title . $after_title;
+			echo $before_title . '<em class="' . $icon . ' fontawesomeblue"></em> ' . $title . $after_title;
 		}
 
 		echo $content;
@@ -76,6 +77,13 @@ class WP_Editor_Widget extends WP_Widget {
 			$title = __( 'New title', 'wp-editor-widget' );
 		}
 
+		if ( isset($instance['icon']) ) {
+			$icon = $instance['icon'];
+		}
+		else {
+			$icon = __( '', 'wp-editor-widget' );
+		}
+
 		if ( isset($instance['content']) ) {
 			$content = $instance['content'];
 		}
@@ -89,6 +97,10 @@ class WP_Editor_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'wp-editor-widget' ); ?>:</label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'icon' ); ?>"><?php _e( 'Icon', 'wp-editor-widget' ); ?>:</label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'icon' ); ?>" name="<?php echo $this->get_field_name( 'icon' ); ?>" type="text" value="<?php echo esc_attr($icon); ?>" />
 		</p>
 		<p>
 			<a href="javascript:WPEditorWidget.showEditor('<?php echo $this->get_field_id( 'content' ); ?>');" class="button"><?php _e( 'Edit content', 'wp-editor-widget' ) ?></a>
@@ -117,6 +129,7 @@ class WP_Editor_Widget extends WP_Widget {
 		$instance = array();
 
 		$instance['title']			= ( !empty($new_instance['title']) ? strip_tags( $new_instance['title']) : '' );
+		$instance['icon']			= ( !empty($new_instance['icon']) ? strip_tags( $new_instance['icon']) : '' );
 		$instance['content']		= ( !empty($new_instance['content']) ? $new_instance['content'] : '' );
 		$instance['output_title']	= ( isset($new_instance['output_title']) && $new_instance['output_title'] == "1" ? 1 : 0 );
 
